@@ -9,12 +9,18 @@ use Pod::L10N::Model;
     my $encoding = '';
     my $meta = '';
 
+    my $outfile = pop @ARGV;
+
     my $base;
     {
-	open my $f1, '<', $ARGV[0] or die "$ARGV[0]: $!";
-	my @slurp = (<$f1>);
-	close $f1;
-	my $sl = join '', @slurp;
+	my $sl = '';
+	for(@ARGV){
+	    open my $f1, '<', $_ or die "$_: $!";
+	    my @slurp = (<$f1>);
+	    close $f1;
+	    $sl .= join '', @slurp;
+	    $sl .= "\n"
+	}
 	$base = Pod::L10N::Model::decode($sl);
     }
 
@@ -47,11 +53,11 @@ use Pod::L10N::Model;
 
     my @sp;
     {
-	open my $f2, '<', $ARGV[1] or die "$ARGV[1]: $!";
+	open my $f2, '<', $outfile or die "$outfile: $!";
 	my @slurp = (<$f2>);
 	my $ss = join '', @slurp;
 	$ss =~ s/\n{3,}/\n\n/g;
-	$ss =~ s/\n$//;
+	$ss =~ s/\n*$//;
 	@sp = split /\n\n/, $ss;
 	close $f2;
     }
