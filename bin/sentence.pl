@@ -83,7 +83,14 @@ binmode(STDOUT, ':encoding(euc-jp)');
 	    }
 
 	    if($#enlist != $#jplist){
-		printf "--------\n%s\n----\n%s\n", $$_[0], $$_[1];
+		for(@enlist){
+		    print "$_\n";
+		}
+		printf "----\n";
+		for(@jplist){
+		    print "$_\n";
+		}
+		print "----------------\n";
 		next;
 	    }
 	    while($#enlist >= 0 && $#jplist >= 0){
