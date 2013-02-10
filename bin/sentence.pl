@@ -9,6 +9,31 @@ use utf8;
 
 binmode(STDOUT, ':encoding(euc-jp)');
 
+sub escape
+{
+    my $_ = shift;
+    s/i\.e\./%%%IE%%%/g;
+    s/e\.g\./%%%EG%%%/g;
+    s/etc\./%%%ETC%%%/g;
+    s/\.\.\./%%%TRIPLE%%%/g;
+    s/\$\./%%%DD%%%/g;
+    s/\$\?/%%%DQ%%%/g;
+    return $_;
+}
+
+sub unescape
+{
+    my $_ = shift;
+    s/^ *//;
+    s/%%%IE%%%/i\.e\./g;
+    s/%%%EG%%%/e\.g\./g;
+    s/%%%ETC%%%/etc\./g;
+    s/%%%TRIPLE%%%/\.\.\./g;
+    s/%%%DD%%%/\$\./g;
+    s/%%%DQ%%%/\$\?/g;
+    return $_;
+}
+
 {
     my %cv;
     my $encoding = '';
@@ -52,18 +77,11 @@ binmode(STDOUT, ':encoding(euc-jp)');
 		my $en = $$_[0];
 		$en =~ s/\n/ /g;
 		$en =~ s/  */ /g;
-		$en =~ s/i\.e\./%%%IE%%%/g;
-		$en =~ s/e\.g\./%%%EG%%%/g;
-		$en =~ s/etc\./%%%ETC%%%/g;
-		$en =~ s/\.\.\./%%%TRIPLE%%%/g;
+		$en =~ s/ *$//;
+		$en = escape($en);
 		@enlist = map {
-		    my $x = $_;
-		    $x =~ s/^ *//;
-		    $x =~ s/%%%IE%%%/i\.e\./;
-		    $x =~ s/%%%EG%%%/e\.g\./;
-		    $x =~ s/%%%ETC%%%/etc\./;
-		    $x =~ s/%%%TRIPLE%%%/\.\.\./;
-		    $x} split /[.?]/, $en;
+		    unescape($_)
+		    } split /[.?]/, $en;
 	    }
 	    my @jplist;
 	    {
@@ -71,15 +89,11 @@ binmode(STDOUT, ':encoding(euc-jp)');
 		chomp $jp;
 		$jp =~ s/\n/ /g;
 		$jp =~ s/\(TBT\).*$//;
-		$jp =~ s/\.\.\./%%%TRIPLE%%%/g;
+		$jp =~ s/ *$//;
+		$jp = escape($jp);
 		@jplist = map {
-		    my $x = $_;
-		    $x =~ s/^ *//;
-		    $x =~ s/%%%IE%%%/i\.e\./;
-		    $x =~ s/%%%EG%%%/e\.g\./;
-		    $x =~ s/%%%ETC%%%/etc\./;
-		    $x =~ s/%%%TRIPLE%%%/\.\.\./;
-		    $x} split /。|\.|\?/, $jp;
+		    unescape($_)
+		    } split /。|\.|\?/, $jp;
 	    }
 
 	    if($#enlist != $#jplist){
