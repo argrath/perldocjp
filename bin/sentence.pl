@@ -13,7 +13,9 @@ sub escape
 {
     my $_ = shift;
     s/i\.e\./%%%IE%%%/g;
+    s/I\.e\./%%%Ie%%%/g;
     s/e\.g\./%%%EG%%%/g;
+    s/E\.g\./%%%Eg%%%/g;
     s/etc\./%%%ETC%%%/g;
     s/\.\.\./%%%TRIPLE%%%/g;
     s/\$\./%%%DD%%%/g;
@@ -26,7 +28,9 @@ sub unescape
     my $_ = shift;
     s/^ *//;
     s/%%%IE%%%/i\.e\./g;
+    s/%%%Ie%%%/I\.e\./g;
     s/%%%EG%%%/e\.g\./g;
+    s/%%%Eg%%%/E\.g\./g;
     s/%%%ETC%%%/etc\./g;
     s/%%%TRIPLE%%%/\.\.\./g;
     s/%%%DD%%%/\$\./g;
