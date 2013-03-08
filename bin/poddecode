@@ -1,0 +1,46 @@
+use strict;
+use warnings;
+
+my $f = 0;
+
+while(<>){
+    if(/^=begin original/){
+	$f = 1;
+	next;
+    }
+    if (/^=end original/){
+	$f = 2;
+	next;
+    }
+    if (/^=head/ || /^=item/){
+	$f = 10;
+	print $_;
+	next;
+    }
+
+    if (/^\n$/){
+	if($f == 1){
+	    next;
+	} elsif($f == 2){
+	    $f = 3;
+	} elsif($f == 10){
+	    $f = 11;
+	} else {
+	    $f = 0;
+	}
+    } else {
+	if($f == 11){
+	    if(/^[(].+[)]/){
+		$f = 3;
+		next;
+	    } else {
+		$f = 0;
+	    }
+	}
+    }
+    
+    if($f != 3){
+	print $_;
+    }
+}
+

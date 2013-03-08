@@ -1,0 +1,105 @@
+use strict;
+use warnings;
+use Data::Dumper;
+
+use Pod::L10N::Model;
+
+{
+    my @sp;
+    {
+#	open my $f2, '<', $ARGV[0] or die "$ARGV[0]: $!";
+	my @slurp = (<>);
+	my $ss = join '', @slurp;
+	$ss =~ s/\n{3,}/\n\n/g;
+	$ss =~ s/\n*$//;
+	@sp = split /\n\n/, $ss;
+#	close $f2;
+    }
+
+    my $f = 0;
+
+    for(@sp){
+	if(
+/=begin original/
+	    ){
+	    $f = 1;
+	}
+	if(
+/=end original/
+	    ){
+	    $f = 0;
+	}
+	if($f == 1){
+	    print $_ . "\n\n";
+	    next;;
+	}
+	if(
+/perldelta - what is new for perl v([.\d]+)
+\(TBT\)/
+	    ){
+	    my $x = $1;
+	    my $y = $x;
+	    $y =~ s/\.//g;
+	    printf
+"perl%sdelta - perl v%s での変更点\n\n", $y, $x;
+	    next;
+	}
+	if(
+/This document describes differences between the ([.\d]+) release and
+the ([.\d]+) release.
+\(TBT\)/
+	    ){
+	    printf
+"この文書は %s リリースと %s リリースの変更点を記述しています。\n\n", $1, $2;
+	    next;
+	}
+	if(
+/If you are upgrading from an earlier release such as ([.\d]+), first read
+L<([\w\d]+)>, which describes differences between ([.\d]+) and
+([.\d]+).
+\(TBT\)/
+	    ){
+	    printf
+"%s のような以前のリリースから更新する場合は、まず %s と
+%s の違いについて記述している L<%s> を読んでください。\n\n", $1, $3, $4, $2;
+	    next;
+	}
+	if(
+/There are no changes intentionally incompatible with ([.\d]+). If any
+exist, they are bugs and reports are welcome.
+\(TBT\)/
+	    ){
+	    printf
+"故意に、%s から互換性がなくなるようにした変更はありません。
+もし %s との互換性がなければ、それはバグですので、
+どうか報告してください。\n\n", $1, $1;
+	    next;
+	}
+	if(
+/Perl ([.\d]+) represents approximately (.+) of development since Perl ([.\d]+)
+and contains approximately ([,\d]+) lines of changes across ([,\d]+) files from ([,\d]+)
+authors.
+\(TBT\)/
+	    ){
+	    printf
+"Perl %s は、Perl %s 以降、%s 人の作者によって、
+%s のファイルに約 %s 行の変更を加えて、
+約 %s開発されてきました。\n\n", $1, $3, $6, $5, $4, $2;
+	    next;
+	}
+	if(
+/Perl continues to flourish into its third decade thanks to a vibrant community
+of users and developers. The following people are known to have contributed the
+improvements that became Perl ([.\d]+):
+\(TBT\)/
+	    ){
+	    printf
+"Perl は、活気のあるユーザーと開発者のコミュニティのおかげで 20 年を超えて
+繁栄しています。
+以下の人々が、Perl %s になるための改良に貢献したことが分かっています:\n\n", $1;
+	    next;
+	}
+	print $_ . "\n\n";
+	next;
+    }
+}

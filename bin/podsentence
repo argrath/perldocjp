@@ -1,0 +1,144 @@
+# 1箇所だけ全角を使っている
+use strict;
+use warnings;
+use Data::Dumper;
+
+use Pod::L10N::Model;
+
+use utf8;
+
+binmode(STDOUT, ':encoding(euc-jp)');
+
+sub escape
+{
+    my $_ = shift;
+    s/i\.e\./%%%IE%%%/g;
+    s/I\.e\./%%%Ie%%%/g;
+    s/e\.g\./%%%EG%%%/g;
+    s/E\.g\./%%%Eg%%%/g;
+    s/etc\./%%%ETC%%%/g;
+    s/\.\.\./%%%TRIPLE%%%/g;
+    s/\$\./%%%DD%%%/g;
+    s/\$\?/%%%DQ%%%/g;
+    return $_;
+}
+
+sub unescape
+{
+    my $_ = shift;
+    s/^ *//;
+    s/%%%IE%%%/i\.e\./g;
+    s/%%%Ie%%%/I\.e\./g;
+    s/%%%EG%%%/e\.g\./g;
+    s/%%%Eg%%%/E\.g\./g;
+    s/%%%ETC%%%/etc\./g;
+    s/%%%TRIPLE%%%/\.\.\./g;
+    s/%%%DD%%%/\$\./g;
+    s/%%%DQ%%%/\$\?/g;
+    return $_;
+}
+
+{
+    my %cv;
+    my $encoding = '';
+    my $meta = '';
+
+    my $base;
+    {
+	open my $f1, '<:encoding(euc-jp)', $ARGV[0] or die "$ARGV[0]: $!";
+	my @slurp = (<$f1>);
+	close $f1;
+	my $sl = join '', @slurp;
+	$base = Pod::L10N::Model::decode($sl);
+    }
+
+    {
+	my $f = 0;
+	for(@$base){
+	    if($$_[0] =~ /^=begin meta/){
+		$f = 1;
+		next;
+	    }
+	    if($$_[0] =~ /^=end meta/){
+		$f = 0;
+		next;
+	    }
+	    if($f == 1){
+		$meta .= $$_[0];
+		next;
+	    }
+	    if($$_[0] =~ /^=encoding/){
+		$encoding = $$_[0];
+		next;
+	    }
+
+	    if(!defined $$_[1]){next;}
+
+	    $$_[1] =~ s/\(TBT\).*$//;
+
+	    my @enlist;
+	    {
+		my $en = $$_[0];
+		$en =~ s/\n/ /g;
+		$en =~ s/  */ /g;
+		$en =~ s/ *$//;
+		$en = escape($en);
+		@enlist = map {
+		    unescape($_)
+		    } split /[.?]/, $en;
+	    }
+	    my @jplist;
+	    {
+		my $jp = $$_[1];
+		chomp $jp;
+		$jp =~ s/\n/ /g;
+		$jp =~ s/\(TBT\).*$//;
+		$jp =~ s/ *$//;
+		$jp = escape($jp);
+		@jplist = map {
+		    unescape($_)
+		    } split /。|\.|\?/, $jp;
+	    }
+
+	    if($#enlist != $#jplist){
+		for(@enlist){
+		    print "$_\n";
+		}
+		printf "----\n";
+		for(@jplist){
+		    print "$_\n";
+		}
+		print "----------------\n";
+		next;
+	    }
+	    while($#enlist >= 0 && $#jplist >= 0){
+		my $en = shift @enlist;
+		my $jp = shift @jplist;
+		my $nowl = $cv{$en};
+		if(!defined $nowl){
+		    $nowl = [];
+		}
+		my @l = @{$nowl};
+		push @l, $jp;
+		$cv{$en} = \@l;
+	    }
+	}
+    }
+
+    for(sort keys %cv){
+	my (@l) = @{$cv{$_}};
+	if($#l >= 1){
+	    my %c;
+	    for(@l){
+		s/^ *//;
+		$c{$_}++;
+	    }
+	    if(scalar(keys %c) >= 2){
+		printf "--------\n%s\n", $_;
+		for(keys %c){
+		    printf "-\n%d: %s\n", $c{$_}, $_;
+		}
+	    }
+	}
+    }
+}
