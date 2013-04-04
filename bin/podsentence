@@ -12,6 +12,8 @@ binmode(STDOUT, ':encoding(euc-jp)');
 sub escape
 {
     my $_ = shift;
+    s/etc\.  /%%%ETC2%%%.  /g;
+
     s/i\.e\./%%%IE%%%/g;
     s/I\.e\./%%%Ie%%%/g;
     s/e\.g\./%%%EG%%%/g;
@@ -27,6 +29,8 @@ sub unescape
 {
     my $_ = shift;
     s/^ *//;
+    s/%%%ETC2%%%/etc/g;
+
     s/%%%IE%%%/i\.e\./g;
     s/%%%Ie%%%/I\.e\./g;
     s/%%%EG%%%/e\.g\./g;
@@ -79,10 +83,10 @@ sub unescape
 	    my @enlist;
 	    {
 		my $en = $$_[0];
+		$en = escape($en);
 		$en =~ s/\n/ /g;
 		$en =~ s/  */ /g;
 		$en =~ s/ *$//;
-		$en = escape($en);
 		@enlist = map {
 		    unescape($_)
 		    } split /[.?]/, $en;
@@ -91,10 +95,10 @@ sub unescape
 	    {
 		my $jp = $$_[1];
 		chomp $jp;
+		$jp = escape($jp);
 		$jp =~ s/\n/ /g;
 		$jp =~ s/\(TBT\).*$//;
 		$jp =~ s/ *$//;
-		$jp = escape($jp);
 		@jplist = map {
 		    unescape($_)
 		    } split /。|\.|\?/, $jp;
