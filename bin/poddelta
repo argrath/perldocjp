@@ -77,8 +77,7 @@ exist, they are bugs and reports are welcome.
 	}
 	if(
 /Perl ([.\d]+) represents approximately (.+) of development since Perl ([.\d]+)
-and contains approximately ([,\d]+) lines of changes across ([,\d]+) files from ([,\d]+)
-authors.
+and contains approximately ([,\d]+) lines of changes across ([,\d]+) files from ([,\d]+)\s+authors.
 \(TBT\)/
 	    ){
 	    printf
@@ -97,6 +96,14 @@ improvements that became Perl ([.\d]+):
 "Perl は、活気のあるユーザーと開発者のコミュニティのおかげで 20 年を超えて
 繁栄しています。
 以下の人々が、Perl %s になるための改良に貢献したことが分かっています:\n\n", $1;
+	    next;
+	}
+	if(
+/([^ ]+) has been upgraded from version ([._\d]+) to (version )?([._\d]+).
+\(TBT\)/
+	    ){
+	    printf
+"%s はバージョン %s から %s に更新されました。\n\n", $1, $2, $4;
 	    next;
 	}
 	print $_ . "\n\n";
