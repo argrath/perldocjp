@@ -1,46 +1,27 @@
 use strict;
 use warnings;
 
-my $f = 0;
+use Pod::L10N::Model;
 
-while(<>){
-    if(/^=begin original/){
-	$f = 1;
-	next;
-    }
-    if (/^=end original/){
-	$f = 2;
-	next;
-    }
-    if (/^=head/ || /^=item/){
-	$f = 10;
-	print $_;
-	next;
+{
+
+    my @slurp;
+
+    {
+	open my $f, '<', $ARGV[0];
+	@slurp = (<$f>);
+	close $f;
     }
 
-    if (/^\n$/){
-	if($f == 1){
-	    next;
-	} elsif($f == 2){
-	    $f = 3;
-	} elsif($f == 10){
-	    $f = 11;
-	} else {
-	    $f = 0;
-	}
-    } else {
-	if($f == 11){
-	    if(/^[(].+[)]/){
-		$f = 3;
-		next;
-	    } else {
-		$f = 0;
-	    }
-	}
-    }
+
+    my $sl = join '', @slurp;
+    my $dl = Pod::L10N::Model::decode($sl);
     
-    if($f != 3){
-	print $_;
+    my $c = 0;
+    my $ok = 0;
+    
+    for (@$dl){
+	my ($en, $jp) = @$_;
+	print $en . "\n\n";
     }
 }
-
