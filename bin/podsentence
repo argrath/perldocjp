@@ -22,6 +22,8 @@ sub escape
     s/\.\.\./%%%TRIPLE%%%/g;
     s/\$\./%%%DD%%%/g;
     s/\$\?/%%%DQ%%%/g;
+
+    s/\.(\w)/%%%PERIOD%%%$1/g;
     return $_;
 }
 
@@ -39,6 +41,8 @@ sub unescape
     s/%%%TRIPLE%%%/\.\.\./g;
     s/%%%DD%%%/\$\./g;
     s/%%%DQ%%%/\$\?/g;
+
+    s/%%%PERIOD%%%/\./g;
     return $_;
 }
 
