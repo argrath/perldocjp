@@ -22,6 +22,7 @@ use Pod::L10N::Model;
     
     for (@$dl){
 	my ($en, $jp) = @$_;
+	if($en =~ /^=encoding/){next;}
 	print $en . "\n\n";
     }
 }
