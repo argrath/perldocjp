@@ -98,11 +98,11 @@ improvements that became Perl ([.\d]+):
 	    next;
 	}
 	if(
-/([^ ]+) has been upgraded from version ([._\d]+) to (version )?([._\d]+).
+/([^ ]+) has been upgraded to (version )?([._\d]+).
 \(TBT\)/
 	    ){
 	    printf
-"%s はバージョン %s から %s に更新されました。\n\n", $1, $2, $4;
+"%s はバージョン %s に更新されました。\n\n", $1, $3;
 	    next;
 	}
 	print $_ . "\n\n";
