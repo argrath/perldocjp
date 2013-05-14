@@ -45,8 +45,7 @@ use Pod::L10N::Model;
 	    next;
 	}
 	if(
-/This document describes differences between the ([.\d]+) release and
-the ([.\d]+) release.
+/This document describes differences between the ([.\d]+) release and\s+the ([.\d]+)\s+release.
 \(TBT\)/
 	    ){
 	    printf
