@@ -89,12 +89,39 @@ m@There are no changes intentionally incompatible with ([.\d]+). If any exist, t
 	    next;
 	}
 	if(
+/Excluding auto-generated files, documentation and release tools, there were approximately ([,\d]+) lines of changes to ([,\d]+) .pm, .t, .c and .h files. \(TBT\)/
+	    ){
+	    printf
+"自動生成ファイル、文書、リリースツールを除くと、%s の .pm, .t, .c,
+.h ファイルに約 %s 行の変更を加えました。\n\n", $2, $1;
+	    next;
+	}
+	if(
 /Perl continues to flourish into its third decade thanks to a vibrant community of users and developers. The following people are known to have contributed the improvements that became Perl (v?[.\d]+): \(TBT\)/
 	    ){
 	    printf
 "Perl は、活気のあるユーザーと開発者のコミュニティのおかげで 20 年を超えて
 繁栄しています。
 以下の人々が、Perl %s になるための改良に貢献したことが分かっています:\n\n", $1;
+	    next;
+	}
+	if(
+/The list above is almost certainly incomplete as it is automatically generated from version control history. In particular, it does not include the names of the \(very much appreciated\) contributors who reported issues to the Perl bug tracker. \(TBT\)/
+	    ){
+	    print
+"これはバージョンコントロール履歴から自動的に生成しているので、ほぼ確実に
+不完全です。
+特に、Perl バグトラッカーに問題を報告をしてくれた (とてもありがたい)貢献者の
+名前を含んでいません。\n\n";
+	    next;
+	}
+	if(
+/Many of the changes included in this version originated in the CPAN modules included in Perl\'s core. We\'re grateful to the entire CPAN community for helping Perl to flourish. \(TBT\)/
+	    ){
+	    print
+"このバージョンに含まれている変更の多くは、Perl コアに含まれている CPAN
+モジュール由来のものです。
+私たちは Perl の発展を助けている CPAN コミュニティ全体に感謝します。\n\n";
 	    next;
 	}
 	if(
