@@ -10,6 +10,7 @@ use Pod::L10N::Model;
 #	open my $f2, '<', $ARGV[0] or die "$ARGV[0]: $!";
 	my @slurp = (<>);
 	my $ss = join '', @slurp;
+	$ss =~ s/\r\n/\n/g;
 	$ss =~ s/\n{3,}/\n\n/g;
 	$ss =~ s/\n*$//;
 	@sp = split /\n\n/, $ss;
@@ -47,10 +48,10 @@ use Pod::L10N::Model;
 	    next;
 	}
 	if(
-/This document describes differences between the ([.\d]+) release and the ([.\d]+) release. \(TBT\)/
+/This document describes (the )?differences between the ([.\d]+) release and the ([.\d]+) release. \(TBT\)/
 	    ){
 	    printf
-"この文書は %s リリースと %s リリースの変更点を記述しています。\n\n", $1, $2;
+"この文書は %s リリースと %s リリースの変更点を記述しています。\n\n", $2, $3;
 	    next;
 	}
 	if(
