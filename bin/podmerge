@@ -4,7 +4,11 @@ use Data::Dumper;
 
 use Pod::L10N::Model;
 
+# perl podmerge (oldtrans ...) neworiginal
+
 {
+    binmode(STDOUT);
+
     my %cv;
     my $encoding = '';
     my $meta = '';
