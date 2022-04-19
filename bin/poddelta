@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Data::Dumper;
+use utf8;
 
 use Pod::L10N::Model;
 
@@ -44,119 +45,119 @@ use Pod::L10N::Model;
 	    my $y = $x;
 	    $y =~ s/\.//g;
 	    printf
-"perl%sdelta - perl v%s ¤Ç¤ÎÊÑ¹¹ÅÀ\n\n", $y, $x;
+"perl%sdelta - perl v%s ã§ã®å¤‰æ›´ç‚¹\n\n", $y, $x;
 	    next;
 	}
 	if(
 /This document describes (the )?differences between the ([.\d]+) release and the ([.\d]+) release. \(TBT\)/
 	    ){
 	    printf
-"¤³¤ÎÊ¸½ñ¤Ï %s ¥ê¥ê¡¼¥¹¤È %s ¥ê¥ê¡¼¥¹¤ÎÊÑ¹¹ÅÀ¤òµ­½Ò¤·¤Æ¤¤¤Ş¤¹¡£\n\n", $2, $3;
+"ã“ã®æ–‡æ›¸ã¯ %s ãƒªãƒªãƒ¼ã‚¹ã¨ %s ãƒªãƒªãƒ¼ã‚¹ã®å¤‰æ›´ç‚¹ã‚’è¨˜è¿°ã—ã¦ã„ã¾ã™ã€‚\n\n", $2, $3;
 	    next;
 	}
 	if(
 /If you are upgrading from an earlier release such as ([.\d]+), first read L<([\w\d]+)>, which describes differences between ([.\d]+) and ([.\d]+). \(TBT\)/
 	    ){
 	    printf
-"%s ¤Î¤è¤¦¤Ê°ÊÁ°¤Î¥ê¥ê¡¼¥¹¤«¤é¹¹¿·¤¹¤ë¾ì¹ç¤Ï¡¢¤Ş¤º %s ¤È
-%s ¤Î°ã¤¤¤Ë¤Ä¤¤¤Æµ­½Ò¤·¤Æ¤¤¤ë L<%s> ¤òÆÉ¤ó¤Ç¤¯¤À¤µ¤¤¡£\n\n", $1, $3, $4, $2;
+"%s ã®ã‚ˆã†ãªä»¥å‰ã®ãƒªãƒªãƒ¼ã‚¹ã‹ã‚‰æ›´æ–°ã™ã‚‹å ´åˆã¯ã€ã¾ãš %s ã¨
+%s ã®é•ã„ã«ã¤ã„ã¦è¨˜è¿°ã—ã¦ã„ã‚‹ L<%s> ã‚’èª­ã‚“ã§ãã ã•ã„ã€‚\n\n", $1, $3, $4, $2;
 	    next;
 	}
 	if(
 /There are no changes intentionally incompatible with ([.\d]+). If any exist, they are bugs and reports are welcome. \(TBT\)/
 	    ){
 	    printf
-"¸Î°Õ¤Ë¡¢%s ¤«¤é¸ß´¹À­¤¬¤Ê¤¯¤Ê¤ë¤è¤¦¤Ë¤·¤¿ÊÑ¹¹¤Ï¤¢¤ê¤Ş¤»¤ó¡£
-¤â¤· %s ¤È¤Î¸ß´¹À­¤¬¤Ê¤±¤ì¤Ğ¡¢¤½¤ì¤Ï¥Ğ¥°¤Ç¤¹¤Î¤Ç¡¢
-¤É¤¦¤«Êó¹ğ¤·¤Æ¤¯¤À¤µ¤¤¡£\n\n", $1, $1;
+"æ•…æ„ã«ã€%s ã‹ã‚‰äº’æ›æ€§ãŒãªããªã‚‹ã‚ˆã†ã«ã—ãŸå¤‰æ›´ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
+ã‚‚ã— %s ã¨ã®äº’æ›æ€§ãŒãªã‘ã‚Œã°ã€ãã‚Œã¯ãƒã‚°ã§ã™ã®ã§ã€
+ã©ã†ã‹å ±å‘Šã—ã¦ãã ã•ã„ã€‚\n\n", $1, $1;
 	    next;
 	}
 	if(
 m@There are no changes intentionally incompatible with ([.\d]+). +If any exist, they are bugs, and we request that you submit a report. +See L</Reporting Bugs> below. \(TBT\)@
 	    ){
 	    printf
-"¸Î°Õ¤Ë¡¢%s ¤«¤é¸ß´¹À­¤¬¤Ê¤¯¤Ê¤ë¤è¤¦¤Ë¤·¤¿ÊÑ¹¹¤Ï¤¢¤ê¤Ş¤»¤ó¡£
-¤â¤· %s ¤È¤Î¸ß´¹À­¤¬¤Ê¤±¤ì¤Ğ¡¢¤½¤ì¤Ï¥Ğ¥°¤Ç¤¹¤Î¤Ç¡¢Êó¹ğ¤ò¤ª´ê¤¤¤·¤Ş¤¹¡£
-°Ê²¼¤Î L</Reporting Bugs> ¤ò»²¾È¤·¤Æ¤¯¤À¤µ¤¤¡£\n\n", $1, $1;
+"æ•…æ„ã«ã€%s ã‹ã‚‰äº’æ›æ€§ãŒãªããªã‚‹ã‚ˆã†ã«ã—ãŸå¤‰æ›´ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
+ã‚‚ã— %s ã¨ã®äº’æ›æ€§ãŒãªã‘ã‚Œã°ã€ãã‚Œã¯ãƒã‚°ã§ã™ã®ã§ã€å ±å‘Šã‚’ãŠé¡˜ã„ã—ã¾ã™ã€‚
+ä»¥ä¸‹ã® L</Reporting Bugs> ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚\n\n", $1, $1;
 	    next;
 	}
 	if(
 m@There are no changes intentionally incompatible with Perl ([.\d]+). +If any exist, they are bugs, and we request that you submit a report. +See L</Reporting Bugs> below. \(TBT\)@
 	    ){
 	    printf
-"¸Î°Õ¤Ë¡¢Perl %s ¤«¤é¸ß´¹À­¤¬¤Ê¤¯¤Ê¤ë¤è¤¦¤Ë¤·¤¿ÊÑ¹¹¤Ï¤¢¤ê¤Ş¤»¤ó¡£
-¤â¤·¸ß´¹À­¤¬¤Ê¤±¤ì¤Ğ¡¢¤½¤ì¤Ï¥Ğ¥°¤Ç¤¹¤Î¤Ç¡¢Êó¹ğ¤ò¤ª´ê¤¤¤·¤Ş¤¹¡£
-°Ê²¼¤Î L</Reporting Bugs> ¤ò»²¾È¤·¤Æ¤¯¤À¤µ¤¤¡£\n\n", $1;
+"æ•…æ„ã«ã€Perl %s ã‹ã‚‰äº’æ›æ€§ãŒãªããªã‚‹ã‚ˆã†ã«ã—ãŸå¤‰æ›´ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
+ã‚‚ã—äº’æ›æ€§ãŒãªã‘ã‚Œã°ã€ãã‚Œã¯ãƒã‚°ã§ã™ã®ã§ã€å ±å‘Šã‚’ãŠé¡˜ã„ã—ã¾ã™ã€‚
+ä»¥ä¸‹ã® L</Reporting Bugs> ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚\n\n", $1;
 	    next;
 	}
 	if(
 /Perl (v?[.\d]+) represents approximately (.+) of development since Perl (v?[.\d]+) and contains approximately ([,\d]+) lines of changes across ([,\d]+) files from ([,\d]+) authors. \(TBT\)/
 	    ){
 	    my ($v, $len, $o, $l, $f, $p) = ($1, $2, $3, $4, $5, $6);
-	    $len =~ s/months/¥ö·î/;
+	    $len =~ s/months/ãƒ¶æœˆ/;
 	    printf
-"Perl %s ¤Ï¡¢Perl %s °Ê¹ß¡¢%s ¿Í¤Îºî¼Ô¤Ë¤è¤Ã¤Æ¡¢
-%s ¤Î¥Õ¥¡¥¤¥ë¤ËÌó %s ¹Ô¤ÎÊÑ¹¹¤ò²Ã¤¨¤Æ¡¢
-Ìó %s³«È¯¤µ¤ì¤Æ¤­¤Ş¤·¤¿¡£\n\n", $v, $o, $p, $f, $l, $len;
+"Perl %s ã¯ã€Perl %s ä»¥é™ã€%s äººã®ä½œè€…ã«ã‚ˆã£ã¦ã€
+%s ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ç´„ %s è¡Œã®å¤‰æ›´ã‚’åŠ ãˆã¦ã€
+ç´„ %sé–‹ç™ºã•ã‚Œã¦ãã¾ã—ãŸã€‚\n\n", $v, $o, $p, $f, $l, $len;
 	    next;
 	}
 	if(
 /Excluding auto-generated files, documentation and release tools, there were approximately ([,\d]+) lines of changes to ([,\d]+) .pm, .t, .c and .h files. \(TBT\)/
 	    ){
 	    printf
-"¼«Æ°À¸À®¥Õ¥¡¥¤¥ë¡¢Ê¸½ñ¡¢¥ê¥ê¡¼¥¹¥Ä¡¼¥ë¤ò½ü¤¯¤È¡¢%s ¤Î .pm, .t, .c,
-.h ¥Õ¥¡¥¤¥ë¤ËÌó %s ¹Ô¤ÎÊÑ¹¹¤ò²Ã¤¨¤Ş¤·¤¿¡£\n\n", $2, $1;
+"è‡ªå‹•ç”Ÿæˆãƒ•ã‚¡ã‚¤ãƒ«ã€æ–‡æ›¸ã€ãƒªãƒªãƒ¼ã‚¹ãƒ„ãƒ¼ãƒ«ã‚’é™¤ãã¨ã€%s ã® .pm, .t, .c,
+.h ãƒ•ã‚¡ã‚¤ãƒ«ã«ç´„ %s è¡Œã®å¤‰æ›´ã‚’åŠ ãˆã¾ã—ãŸã€‚\n\n", $2, $1;
 	    next;
 	}
 	if(
 /Perl continues to flourish into its third decade thanks to a vibrant community of users and developers. The following people are known to have contributed the improvements that became Perl (v?[.\d]+): \(TBT\)/
 	    ){
 	    printf
-"Perl ¤Ï¡¢³èµ¤¤Î¤¢¤ë¥æ¡¼¥¶¡¼¤È³«È¯¼Ô¤Î¥³¥ß¥å¥Ë¥Æ¥£¤Î¤ª¤«¤²¤Ç 20 Ç¯¤òÄ¶¤¨¤Æ
-ÈË±É¤·¤Æ¤¤¤Ş¤¹¡£
-°Ê²¼¤Î¿Í¡¹¤¬¡¢Perl %s ¤Ë¤Ê¤ë¤¿¤á¤Î²şÎÉ¤Ë¹×¸¥¤·¤¿¤³¤È¤¬Ê¬¤«¤Ã¤Æ¤¤¤Ş¤¹:\n\n", $1;
+"Perl ã¯ã€æ´»æ°—ã®ã‚ã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼ã¨é–‹ç™ºè€…ã®ã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£ã®ãŠã‹ã’ã§ 20 å¹´ã‚’è¶…ãˆã¦
+ç¹æ „ã—ã¦ã„ã¾ã™ã€‚
+ä»¥ä¸‹ã®äººã€…ãŒã€Perl %s ã«ãªã‚‹ãŸã‚ã®æ”¹è‰¯ã«è²¢çŒ®ã—ãŸã“ã¨ãŒåˆ†ã‹ã£ã¦ã„ã¾ã™:\n\n", $1;
 	    next;
 	}
 	if(
 /Perl continues to flourish into its fourth decade thanks to a vibrant community of users and developers. The following people are known to have contributed the improvements that became Perl (v?[.\d]+): \(TBT\)/
 	    ){
 	    printf
-"Perl ¤Ï¡¢³èµ¤¤Î¤¢¤ë¥æ¡¼¥¶¡¼¤È³«È¯¼Ô¤Î¥³¥ß¥å¥Ë¥Æ¥£¤Î¤ª¤«¤²¤Ç 30 Ç¯¤òÄ¶¤¨¤Æ
-ÈË±É¤·¤Æ¤¤¤Ş¤¹¡£
-°Ê²¼¤Î¿Í¡¹¤¬¡¢Perl %s ¤Ë¤Ê¤ë¤¿¤á¤Î²şÎÉ¤Ë¹×¸¥¤·¤¿¤³¤È¤¬Ê¬¤«¤Ã¤Æ¤¤¤Ş¤¹:\n\n", $1;
+"Perl ã¯ã€æ´»æ°—ã®ã‚ã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼ã¨é–‹ç™ºè€…ã®ã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£ã®ãŠã‹ã’ã§ 30 å¹´ã‚’è¶…ãˆã¦
+ç¹æ „ã—ã¦ã„ã¾ã™ã€‚
+ä»¥ä¸‹ã®äººã€…ãŒã€Perl %s ã«ãªã‚‹ãŸã‚ã®æ”¹è‰¯ã«è²¢çŒ®ã—ãŸã“ã¨ãŒåˆ†ã‹ã£ã¦ã„ã¾ã™:\n\n", $1;
 	    next;
 	}
 	if(
 /The list above is almost certainly incomplete as it is automatically generated from version control history. In particular, it does not include the names of the \(very much appreciated\) contributors who reported issues to the Perl bug tracker. \(TBT\)/
 	    ){
 	    print
-"¤³¤ì¤Ï¥Ğ¡¼¥¸¥ç¥ó¥³¥ó¥È¥í¡¼¥ëÍúÎò¤«¤é¼«Æ°Åª¤ËÀ¸À®¤·¤Æ¤¤¤ë¤Î¤Ç¡¢¤Û¤Ü³Î¼Â¤Ë
-ÉÔ´°Á´¤Ç¤¹¡£
-ÆÃ¤Ë¡¢Perl ¥Ğ¥°¥È¥é¥Ã¥«¡¼¤ËÌäÂê¤òÊó¹ğ¤ò¤·¤Æ¤¯¤ì¤¿ (¤È¤Æ¤â¤¢¤ê¤¬¤¿¤¤)¹×¸¥¼Ô¤Î
-Ì¾Á°¤ò´Ş¤ó¤Ç¤¤¤Ş¤»¤ó¡£\n\n";
+"ã“ã‚Œã¯ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«å±¥æ­´ã‹ã‚‰è‡ªå‹•çš„ã«ç”Ÿæˆã—ã¦ã„ã‚‹ã®ã§ã€ã»ã¼ç¢ºå®Ÿã«
+ä¸å®Œå…¨ã§ã™ã€‚
+ç‰¹ã«ã€Perl ãƒã‚°ãƒˆãƒ©ãƒƒã‚«ãƒ¼ã«å•é¡Œã‚’å ±å‘Šã‚’ã—ã¦ãã‚ŒãŸ (ã¨ã¦ã‚‚ã‚ã‚ŠãŒãŸã„)è²¢çŒ®è€…ã®
+åå‰ã‚’å«ã‚“ã§ã„ã¾ã›ã‚“ã€‚\n\n";
 	    next;
 	}
 	if(
 /Many of the changes included in this version originated in the CPAN modules included in Perl\'s core. We\'re grateful to the entire CPAN community for helping Perl to flourish. \(TBT\)/
 	    ){
 	    print
-"¤³¤Î¥Ğ¡¼¥¸¥ç¥ó¤Ë´Ş¤Ş¤ì¤Æ¤¤¤ëÊÑ¹¹¤ÎÂ¿¤¯¤Ï¡¢Perl ¥³¥¢¤Ë´Ş¤Ş¤ì¤Æ¤¤¤ë CPAN
-¥â¥¸¥å¡¼¥ëÍ³Íè¤Î¤â¤Î¤Ç¤¹¡£
-»ä¤¿¤Á¤Ï Perl ¤ÎÈ¯Å¸¤ò½õ¤±¤Æ¤¤¤ë CPAN ¥³¥ß¥å¥Ë¥Æ¥£Á´ÂÎ¤Ë´¶¼Õ¤·¤Ş¤¹¡£\n\n";
+"ã“ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã«å«ã¾ã‚Œã¦ã„ã‚‹å¤‰æ›´ã®å¤šãã¯ã€Perl ã‚³ã‚¢ã«å«ã¾ã‚Œã¦ã„ã‚‹ CPAN
+ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ç”±æ¥ã®ã‚‚ã®ã§ã™ã€‚
+ç§ãŸã¡ã¯ Perl ã®ç™ºå±•ã‚’åŠ©ã‘ã¦ã„ã‚‹ CPAN ã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£å…¨ä½“ã«æ„Ÿè¬ã—ã¾ã™ã€‚\n\n";
 	    next;
 	}
 	if(
 /([^ ]+) has been upgraded to (version )?([._\d]+). \(TBT\)/
 	    ){
 	    printf
-"%s ¤Ï¥Ğ¡¼¥¸¥ç¥ó %s ¤Ë¹¹¿·¤µ¤ì¤Ş¤·¤¿¡£\n\n", $1, $3;
+"%s ã¯ãƒãƒ¼ã‚¸ãƒ§ãƒ³ %s ã«æ›´æ–°ã•ã‚Œã¾ã—ãŸã€‚\n\n", $1, $3;
 	    next;
 	}
 	if(
 /([^ ]+) has been upgraded from (version )?([._\d]+) to (version )?([._\d]+). \(TBT\)/
 	    ){
 	    printf
-"%s ¤Ï¥Ğ¡¼¥¸¥ç¥ó %s ¤«¤é %s ¤Ë¹¹¿·¤µ¤ì¤Ş¤·¤¿¡£\n\n", $1, $3, $5;
+"%s ã¯ãƒãƒ¼ã‚¸ãƒ§ãƒ³ %s ã‹ã‚‰ %s ã«æ›´æ–°ã•ã‚Œã¾ã—ãŸã€‚\n\n", $1, $3, $5;
 	    next;
 	}
 	print $old . "\n\n";
