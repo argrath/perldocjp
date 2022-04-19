@@ -1,0 +1,226 @@
+use strict;
+use warnings;
+use Data::Dumper;
+use utf8;
+
+use Pod::L10N::Model;
+
+{
+    my @sp;
+    {
+#	open my $f2, '<', $ARGV[0] or die "$ARGV[0]: $!";
+	my @slurp = (<>);
+	my $ss = join '', @slurp;
+	$ss =~ s/\r\n/\n/g;
+	$ss =~ s/\n{3,}/\n\n/g;
+	$ss =~ s/\n*$//;
+	@sp = split /\n\n/, $ss;
+#	close $f2;
+    }
+
+    binmode(STDOUT);
+
+    my $f = 0;
+
+    for(@sp){
+	if(
+/=begin original/
+	    ){
+	    $f = 1;
+	}
+	if(
+/=end original/
+	    ){
+	    $f = 0;
+	}
+	if($f == 1){
+	    print $_ . "\n\n";
+	    next;;
+	}
+	my $old = $_;
+	s/\n/ /g;
+	s/ {2,}/ /g;
+
+        if(
+/Introduced in(:?) (.+)/
+            ){
+            printf << "EOF";
+=begin original
+
+$_
+
+=end original
+
+$2 で導入されました。
+
+EOF
+  ;
+
+            next;
+        }
+
+        if(
+/Accepted in (.+)/
+            ){
+            printf << "EOF";
+=begin original
+
+$_
+
+=end original
+
+$1 で受け入れられました。
+
+EOF
+  ;
+            next;
+        }
+
+        if(
+/Removed in(:?) (.+)/
+            ){
+            printf << "EOF";
+=begin original
+
+$_
+
+=end original
+
+$2 で削除されました。
+
+EOF
+  ;
+            next;
+        }
+
+        if(
+/Modified in(:?) (.+)/
+            ){
+            printf << "EOF";
+=begin original
+
+$_
+
+=end original
+
+$2 で変更されました。
+
+EOF
+  ;
+            next;
+        }
+
+        if(
+/Deprecated in(:?) (.+)/
+            ){
+            printf << "EOF";
+=begin original
+
+$_
+
+=end original
+
+$2 で廃止予定になりました。
+
+EOF
+  ;
+            next;
+        }
+
+        if(
+/See also(:?) (.+)/
+            ){
+            printf << "EOF";
+=begin original
+
+$_
+
+=end original
+
+$2 も参照してください。
+
+EOF
+  ;
+            next;
+        }
+
+        if(
+/Moved from(:?) (.+) to CPAN/
+            ){
+            printf << "EOF";
+=begin original
+
+$_
+
+=end original
+
+$2 から CPAN に移動しました。
+
+EOF
+  ;
+            next;
+        }
+
+        if(
+/The ticket for this feature is.+(L.*)\./
+            ){
+            my $o = $_;
+            my $l = $1;
+            $o =~ s/ is / is\n/;
+            printf << "EOF";
+=begin original
+
+$o
+
+=end original
+
+この機能に関するチケットは
+$l。
+
+EOF
+  ;
+            next;
+        }
+
+        if(
+/Using this feature triggers warnings in the category.+(C.*)\./
+            ){
+            my $o = $_;
+            my $l = $1;
+            $o =~ s/ category / category\n/;
+            printf << "EOF";
+=begin original
+
+$o
+
+=end original
+
+この機能を使うと $l カテゴリの警告が発生します。
+
+EOF
+  ;
+            next;
+        }
+
+        if(
+/Using this feature triggered warnings in the category.+(C.*)\./
+            ){
+            my $o = $_;
+            my $l = $1;
+            $o =~ s/ category / category\n/;
+            printf << "EOF";
+=begin original
+
+$o
+
+=end original
+
+この機能を使うと $l カテゴリの警告が発生していました。
+
+EOF
+  ;
+            next;
+        }
+
+    }
+}
