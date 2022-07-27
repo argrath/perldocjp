@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 use Data::Dumper;
+use Encode;
 
 use Pod::L10N::Model;
 
@@ -53,11 +54,18 @@ sub unescape
 
     my $base;
     {
-	open my $f1, '<:encoding(euc-jp)', $ARGV[0] or die "$ARGV[0]: $!";
+	open my $f1, '<', $ARGV[0] or die "$ARGV[0]: $!";
 	my @slurp = (<$f1>);
 	close $f1;
 	my $sl = join '', @slurp;
-	$base = Pod::L10N::Model::decode($sl);
+        my $enc;
+        if($sl =~ /=encoding euc-jp/s){
+            $enc = 'euc-jp';
+        } else {
+            $enc = 'utf-8';
+        }
+        my $sl2 = Encode::decode($enc, $sl);
+	$base = Pod::L10N::Model::decode($sl2);
     }
 
     {
