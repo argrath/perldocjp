@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 use Pod::L10N::Model;
+binmode(STDOUT);
 
 {
 
@@ -17,12 +18,19 @@ use Pod::L10N::Model;
     my $sl = join '', @slurp;
     my $dl = Pod::L10N::Model::decode($sl);
     
-    my $c = 0;
-    my $ok = 0;
+    my $f = 0;
     
     for (@$dl){
 	my ($en, $jp) = @$_;
-	if($en =~ /^=encoding/){next;}
+	if($en =~ /^=begin meta/){
+	    $f = 1;
+	    next;
+	}
+	if($en =~ /^=end meta/){
+	    $f = 0;
+	    next;
+	}
+	if($f == 1){next;}
 	print $en . "\n\n";
     }
 }
