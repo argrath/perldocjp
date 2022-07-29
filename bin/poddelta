@@ -5,6 +5,11 @@ use utf8;
 
 use Pod::L10N::Model;
 
+$| = 1;
+
+binmode STDOUT, ":encoding(utf-8)";
+binmode STDIN, ":encoding(utf-8)";
+
 {
     my @sp;
     {
